@@ -1,5 +1,5 @@
 import { createStore } from 'redux'
-import LanguageState from './languageReducer'
+import LanguageState from './language/languageReducer'
 
 const store = createStore(LanguageState);
 
