@@ -23,16 +23,24 @@ export class HeaderComponent extends React.Component<Props, State> {
         store.subscribe(() => {
             const storeState = store.getState();
             this.setState({
-                language:storeState.language
+                language:storeState.language,
+                languageList:storeState.languageList
             })
         })
     }
 
     private handleMenuClick = (e) => {
-        console.log(e);
-        const action = {
-            type:"change_language",
-            payload:e.key
+        let action;
+        if(e.key === "new") {
+            action = {
+                type:"add_language",
+                payload:{name:"新语言",code:"new_lang"}
+            }
+        } else {
+            action = {
+                type:"change_language",
+                payload:e.key
+            }
         }
         store.dispatch(action);
     }
