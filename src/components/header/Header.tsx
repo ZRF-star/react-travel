@@ -2,44 +2,28 @@ import React from "react";
 import { Layout, Typography, Input, Menu, Button, Dropdown } from "antd";
 import { withRouter,RouteComponentProps } from 'react-router-dom'
 import { withTranslation, WithTranslation } from 'react-i18next'
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { GlobalOutlined } from "@ant-design/icons";
-import store from '../../redux/store'
-import { LanguageState } from '../../redux/language/languageReducer'
+import { RootState } from '../../redux/store'
 import { changeLanguageActionCreator, addLanguageActionCreator } from '../../redux/language/languageActions'
 import styles from "./Header.module.css";
 import logo from '../../assets/logo.svg';
 
 interface IHeaderProps {}
-interface State extends LanguageState {}
 
-type Props = IHeaderProps & RouteComponentProps & WithTranslation;
+type State = ReturnType<typeof mapStateToProps>
+type Props = IHeaderProps & RouteComponentProps & WithTranslation & State &
+             ReturnType<typeof mapDispatchToProps>;
 
-export class HeaderComponent extends React.Component<Props, State> {
-    constructor(props) {
-        super(props);
-        const storeState = store.getState();
-        this.state = {
-            language:storeState.language,
-            languageList:storeState.languageList
-        }
-        store.subscribe(() => {
-            const storeState = store.getState();
-            this.setState({
-                language:storeState.language,
-                languageList:storeState.languageList
-            })
-        })
-    }
-
+export class HeaderComponent extends React.Component<Props> {
+    
     private handleMenuClick = (e) => {
         if(e.key === "new") {
-            const action = addLanguageActionCreator("新语言", "new_lang");
-            store.dispatch(action);
+            this.props.addLanguage("新语言","new_lang");
         } else {
-            const action = changeLanguageActionCreator(e.key);
-            store.dispatch(action);
+            this.props.changeLanguage(e.key);
         }
-        
     }
 
     render() {
@@ -54,7 +38,7 @@ export class HeaderComponent extends React.Component<Props, State> {
                             style={{ marginLeft: 15 }}
                             overlay={
                                 <Menu onClick={this.handleMenuClick}>
-                                    {this.state.languageList.map(item => {
+                                    {this.props.languageList.map(item => {
                                         return <Menu.Item key={item.code}>{item.name}</Menu.Item>
                                     })}
                                     <Menu.Item key={"new"}>添加语言</Menu.Item>
@@ -62,7 +46,7 @@ export class HeaderComponent extends React.Component<Props, State> {
                             }
                             icon={<GlobalOutlined />}
                         >
-                            {this.state.language === "zh" ? "中文" : "English"}
+                            {this.props.language === "zh" ? "中文" : "English"}
                         </Dropdown.Button>
                         <Button.Group className={styles['botton-group']}>
                             <Button onClick={() => history.push('register')}>{t("header.register")}</Button>
@@ -103,5 +87,23 @@ export class HeaderComponent extends React.Component<Props, State> {
     }   
 }
 
-export const Header =  withTranslation()(withRouter(HeaderComponent));
+function mapStateToProps(state:RootState) {
+    return {
+        language: state.language,
+        languageList: state.languageList,
+    };
+}
+function mapDispatchToProps(dispatch:Dispatch) {
+    return {
+        changeLanguage:(code:"zh" | "en") => {
+            const action = changeLanguageActionCreator(code);
+            dispatch(action);
+        },
+        addLanguage:(name:string, code:string) => {
+            const action = addLanguageActionCreator(name, code);
+            dispatch(action);
+        },
+    };
+}
+export const Header =  connect(mapStateToProps, mapDispatchToProps)(withTranslation()(withRouter(HeaderComponent)));
 
