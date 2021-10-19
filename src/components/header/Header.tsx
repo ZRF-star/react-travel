@@ -20,6 +20,7 @@ export class HeaderComponent extends React.Component<Props> {
     
     private handleMenuClick = (e) => {
         if(e.key === "new") {
+            console.log(e.key);
             this.props.addLanguage("新语言","new_lang");
         } else {
             this.props.changeLanguage(e.key);
