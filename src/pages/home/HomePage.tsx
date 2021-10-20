@@ -1,54 +1,43 @@
 import React from "react";
-import { Row, Col, Typography, Spin, AutoComplete } from 'antd';
+import { Row, Col, Typography, Spin } from 'antd';
 import axios from 'axios';
 import { withTranslation, WithTranslation } from 'react-i18next'
+import { connect } from 'react-redux';
 import sideImage from "../../assets/images/sider_2019_12-09.png";
 import sideImage2 from "../../assets/images/sider_2019_02-04.png";
 import sideImage3 from "../../assets/images/sider_2019_02-04-2.png";
 import { Header, Footer, Carousel, SideMenu, ProductCollection } from "../../components";
+import { RootState } from '../../redux/store';
+import { 
+    fetchRecommendProductsActionCreator,
+    fetchRecommendProductsActionSuccessCreator,
+    fetchRecommendProductsActionFailCreator
+} from '../../redux/recommendProducts/recommendProductsActions';
+import styles from './HomePage.module.css';
 
-import styles from './HomePage.module.css'
-
-interface IHomePageState {
-    productList:any;
-    loading:boolean;
-    error:string | null;
-}
+interface IHomePageState {}
 interface IHomePageProps {} 
 
-type Props = IHomePageProps & WithTranslation;
+type Props = IHomePageProps 
+            & WithTranslation 
+            & ReturnType<typeof mapStateToProps> 
+            & ReturnType<typeof mapDispatchToProps>;
 
 class HomePageComponet extends React.Component<Props,IHomePageState> {
-    constructor(props:Props) {
-        super(props);
-        this.state = {
-            productList:[],
-            loading:true,
-            error:null,
-        }
-    }
 
     async componentDidMount() {
+            this.props.fetchStart();
         try {
             const { data } = await axios.get("http://123.56.149.216:8080/api/productCollections");
-        this.setState({
-            productList:data,
-            loading:false,
-            error:null,
-        })
+            this.props.fetchSuccess(data);
         } catch(e) {
-            this.setState({
-                error:e.message,
-            })
+            this.props.fetchFail(e);
         }
         
     }
 
-
     render() {
-        const { productList, loading, error } = this.state;
-        console.log(productList);
-        const { t } = this.props;
+        const { productList, loading, error, t  } = this.props;
 
         if(loading) {
             return <Spin style={{
@@ -94,5 +83,25 @@ class HomePageComponet extends React.Component<Props,IHomePageState> {
     }
 }
 
-// 第一个小括号代表的是语言所使用的命名空间
-export const HomePage = withTranslation()(HomePageComponet);
+function mapStateToProps(state:RootState) {
+    return {
+        productList:state.recommendProductsReducer.productList,
+        loading:state.recommendProductsReducer.loading,
+        error:state.recommendProductsReducer.error,
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+       fetchStart: () => {
+           dispatch(fetchRecommendProductsActionCreator());
+       },
+       fetchSuccess:(data) => {
+           dispatch(fetchRecommendProductsActionSuccessCreator(data));
+       },
+       fetchFail:(error) => {
+           dispatch(fetchRecommendProductsActionFailCreator(error))
+       }
+    }
+}
+// withTranslation()(HomePageComponet) 第一个小括号代表的是语言所使用的命名空间
+export const HomePage = connect(mapStateToProps, mapDispatchToProps)(withTranslation()(HomePageComponet));
