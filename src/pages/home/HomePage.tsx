@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Typography } from 'antd';
+import { Row, Col, Typography, Spin, AutoComplete } from 'antd';
 import axios from 'axios';
 import { withTranslation, WithTranslation } from 'react-i18next'
 import sideImage from "../../assets/images/sider_2019_12-09.png";
@@ -11,6 +11,8 @@ import styles from './HomePage.module.css'
 
 interface IHomePageState {
     productList:any;
+    loading:boolean;
+    error:string | null;
 }
 interface IHomePageProps {} 
 
@@ -20,26 +22,49 @@ class HomePageComponet extends React.Component<Props,IHomePageState> {
     constructor(props:Props) {
         super(props);
         this.state = {
-            productList:[]
+            productList:[],
+            loading:true,
+            error:null,
         }
     }
 
     async componentDidMount() {
-        const { data } = await axios.get("http://123.56.149.216:8080/api/productCollections", {
+        try {
+            const { data } = await axios.get("http://123.56.149.216:8080/api/productCollections", {
             headers: {
                 "x-icode":"J29B68B309A8D9A16"
             }
         });
         this.setState({
-            productList:data
+            productList:data,
+            loading:false,
+            error:null,
         })
+        } catch(e) {
+            this.setState({
+                error:e.message,
+            })
+        }
+        
     }
 
 
     render() {
-        const { productList } = this.state;
+        const { productList, loading, error } = this.state;
         console.log(productList);
         const { t } = this.props;
+
+        if(loading) {
+            return <Spin style={{
+                width:"100%",
+                marginTop:200,
+                marginLeft:'auto',
+                marginRight:'auto',
+            }}></Spin>
+        } 
+        if(error) {
+            return <div>error:{error}</div>
+        }
         return <> 
         <Header />
         {/* 页面的内容 content */}
