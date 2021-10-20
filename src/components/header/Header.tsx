@@ -90,8 +90,8 @@ export class HeaderComponent extends React.Component<Props> {
 
 function mapStateToProps(state:RootState) {
     return {
-        language: state.languageReducer.language,
-        languageList: state.languageReducer.languageList,
+        language: state.language.language,
+        languageList: state.language.languageList,
     };
 }
 function mapDispatchToProps(dispatch:Dispatch) {

@@ -1,6 +1,5 @@
 import React from "react";
 import { Row, Col, Typography, Spin } from 'antd';
-import axios from 'axios';
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { connect } from 'react-redux';
 import sideImage from "../../assets/images/sider_2019_12-09.png";
@@ -9,9 +8,7 @@ import sideImage3 from "../../assets/images/sider_2019_02-04-2.png";
 import { Header, Footer, Carousel, SideMenu, ProductCollection } from "../../components";
 import { RootState } from '../../redux/store';
 import { 
-    fetchRecommendProductsActionCreator,
-    fetchRecommendProductsActionSuccessCreator,
-    fetchRecommendProductsActionFailCreator
+    getMeDataActionFailCreator,
 } from '../../redux/recommendProducts/recommendProductsActions';
 import styles from './HomePage.module.css';
 
@@ -25,15 +22,8 @@ type Props = IHomePageProps
 
 class HomePageComponet extends React.Component<Props,IHomePageState> {
 
-    async componentDidMount() {
-            this.props.fetchStart();
-        try {
-            const { data } = await axios.get("http://123.56.149.216:8080/api/productCollections");
-            this.props.fetchSuccess(data);
-        } catch(e) {
-            this.props.fetchFail(e);
-        }
-        
+    componentDidMount() {
+        this.props.giveMeData();
     }
 
     render() {
@@ -85,22 +75,16 @@ class HomePageComponet extends React.Component<Props,IHomePageState> {
 
 function mapStateToProps(state:RootState) {
     return {
-        productList:state.recommendProductsReducer.productList,
-        loading:state.recommendProductsReducer.loading,
-        error:state.recommendProductsReducer.error,
+        productList:state.recommendProducts.productList,
+        loading:state.recommendProducts.loading,
+        error:state.recommendProducts.error,
     }
 }
 function mapDispatchToProps(dispatch) {
     return {
-       fetchStart: () => {
-           dispatch(fetchRecommendProductsActionCreator());
-       },
-       fetchSuccess:(data) => {
-           dispatch(fetchRecommendProductsActionSuccessCreator(data));
-       },
-       fetchFail:(error) => {
-           dispatch(fetchRecommendProductsActionFailCreator(error))
-       }
+        giveMeData:() => { 
+            dispatch(getMeDataActionFailCreator()) 
+        }
     }
 }
 // withTranslation()(HomePageComponet) 第一个小括号代表的是语言所使用的命名空间

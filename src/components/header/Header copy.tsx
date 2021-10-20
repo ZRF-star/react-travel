@@ -13,8 +13,8 @@ import { LanguageActionsType, changeLanguageActionCreator,addLanguageActionCreat
 export const Header: React.FC = () => {
     const history = useHistory(); 
     console.log(history);
-    const language = useSelector((state) => state.languageReducer.language);
-    const languageList = useSelector((state) => state.languageReducer.languageList);
+    const language = useSelector((state) => state.language.language);
+    const languageList = useSelector((state) => state.language.languageList);
     // const dispatch = useDispatch<Dispatch<LanguageActionsType>>();
     const dispatch = useDispatch();
 
