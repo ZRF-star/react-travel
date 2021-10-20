@@ -30,11 +30,7 @@ class HomePageComponet extends React.Component<Props,IHomePageState> {
 
     async componentDidMount() {
         try {
-            const { data } = await axios.get("http://123.56.149.216:8080/api/productCollections", {
-            headers: {
-                "x-icode":"J29B68B309A8D9A16"
-            }
-        });
+            const { data } = await axios.get("http://123.56.149.216:8080/api/productCollections");
         this.setState({
             productList:data,
             loading:false,
