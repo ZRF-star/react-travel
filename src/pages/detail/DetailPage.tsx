@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { RouteComponentProps, useParams } from "react-router-dom";
 import axios from "axios";
 import { Spin, Row, Col, Divider, Typography, DatePicker, Anchor,Menu } from "antd";
 import { useDispatch } from "react-redux";
-import { ProductDetailSlice } from "../../redux/productDetail/slice";
+import { ProductDetailSlice, getProductDetail } from "../../redux/productDetail/slice";
 // 引入自己封装的useSelector
 import { useSelector } from "../../redux/hooks";
 import { commentMockData } from "./mockup";
@@ -26,19 +26,11 @@ export const DetailPage: React.FC<RouteComponentProps<MatchParams>> = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(ProductDetailSlice.actions.fetchStart());
-      try {
-        const { data } = await axios.get(
-          `http://123.56.149.216:8080/api/touristRoutes/${touristRouteId}`
-        );
-        dispatch(ProductDetailSlice.actions.fetchSuccess(data));
-      } catch (error) {
-        dispatch(ProductDetailSlice.actions.fetchFail(error));
-      }
+      dispatch(getProductDetail(touristRouteId));
     };
     fetchData();
   }, []);
-  
+
   if (loading) {
     return (
       <Spin
