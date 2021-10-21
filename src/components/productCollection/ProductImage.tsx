@@ -7,7 +7,7 @@ interface PropsType extends RouteComponentProps {
     size: "large" | "small";
     imageSrc: string;
     price: number | string;
-    title: string;
+    title: string; 
 }
 
 const ProductImageComponent:React.FC<PropsType> = ({ 
