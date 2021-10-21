@@ -4,12 +4,14 @@ import { actionLog } from "./middlewares/actionLog";
 import languageReducer from "./language/languageReducer";
 import recommendProductsReducer from "./recommendProducts/recommendProductsReducer";
 import { ProductDetailSlice } from "./productDetail/slice";
+import { productSearchSlice } from "./productSearch/slice"
 
 
 const rootReducer = combineReducers({
     language: languageReducer,
     recommendProducts: recommendProductsReducer,
-    productDetail:ProductDetailSlice.reducer
+    productDetail:ProductDetailSlice.reducer,
+    searchProduct:productSearchSlice.reducer,
 })
 
 // const store = createStore(rootReducer, applyMiddleware(thunk));
