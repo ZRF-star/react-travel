@@ -92,7 +92,7 @@ export class HeaderComponent extends React.Component<Props, State> {
                   {t("header.welcome")}
                   <Typography.Text strong>{username}</Typography.Text>
                 </span>
-                <Button>{t("header.shoppingCart")}</Button>
+                <Button onClick={() => history.push("/shoppingCart")}>{t("header.shoppingCart")}</Button>
                 <Button onClick={this.handleLogOut}>{t("header.signOut")}</Button>
               </Button.Group>
             ) : (
