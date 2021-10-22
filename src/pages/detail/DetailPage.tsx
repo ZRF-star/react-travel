@@ -9,6 +9,7 @@ import { useSelector } from "../../redux/hooks";
 import { commentMockData } from "./mockup";
 import styles from "./DetailPage.module.css";
 import { Header, Footer, ProductIntro, ProductComments } from "../../components";
+import { MainLayout } from "../../layouts/mainLayout/MainLayout";
 
 const { RangePicker } = DatePicker;
 
@@ -50,8 +51,7 @@ export const DetailPage: React.FC<RouteComponentProps<MatchParams>> = () => {
   }
   return (
     <>
-      <Header />
-      <div className={styles["page-content"]}>
+      <MainLayout>
         {/* 产品简介 与 日期选择 */}
         <div className={styles["product-intro-container"]}>
           <Row>
@@ -120,8 +120,7 @@ export const DetailPage: React.FC<RouteComponentProps<MatchParams>> = () => {
           </div>
           
         </div>
-      </div>
-      <Footer />
+     </MainLayout>
     </>
   );
 };

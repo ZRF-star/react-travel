@@ -50,8 +50,8 @@ export class HeaderComponent extends React.Component<Props> {
                             {this.props.language === "zh" ? "中文" : "English"}
                         </Dropdown.Button>
                         <Button.Group className={styles['botton-group']}>
-                            <Button onClick={() => history.push('register')}>{t("header.register")}</Button>
-                            <Button onClick={() => history.push('signIn')}>{t("header.signin")}</Button>
+                            <Button onClick={() => history.push('/register')}>{t("header.register")}</Button>
+                            <Button onClick={() => history.push('/signIn')}>{t("header.signin")}</Button>
                         </Button.Group>
                     </div>
                 </div>

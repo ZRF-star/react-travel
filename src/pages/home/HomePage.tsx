@@ -11,6 +11,7 @@ import {
     getMeDataActionFailCreator,
 } from '../../redux/recommendProducts/recommendProductsActions';
 import styles from './HomePage.module.css';
+import { MainLayout } from "../../layouts/mainLayout/MainLayout";
 
 interface IHomePageState {}
 interface IHomePageProps {} 
@@ -41,9 +42,7 @@ class HomePageComponet extends React.Component<Props,IHomePageState> {
             return <div>error:{error}</div>
         }
         return <> 
-        <Header />
-        {/* 页面的内容 content */}
-        <div className={styles['page-content']}>
+       <MainLayout>
             <Row style={{ marginTop: 20 }}>
                 <Col span={6}>
                     <SideMenu />
@@ -67,8 +66,7 @@ class HomePageComponet extends React.Component<Props,IHomePageState> {
                 sideImage={sideImage3}
                 products={productList[2].touristRoutes}
             /></>) :null}
-        </div>
-        <Footer />
+       </MainLayout>
         </>
     }
 }
