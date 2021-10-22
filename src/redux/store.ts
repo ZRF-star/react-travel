@@ -5,6 +5,7 @@ import languageReducer from "./language/languageReducer";
 import recommendProductsReducer from "./recommendProducts/recommendProductsReducer";
 import { ProductDetailSlice } from "./productDetail/slice";
 import { productSearchSlice } from "./productSearch/slice"
+import { UserSlice } from "./user/slice";
 
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     recommendProducts: recommendProductsReducer,
     productDetail:ProductDetailSlice.reducer,
     searchProduct:productSearchSlice.reducer,
+    user:UserSlice.reducer,
 })
 
 // const store = createStore(rootReducer, applyMiddleware(thunk));

@@ -1,5 +1,11 @@
-import styles from "./SignInForm.module.css";
 import { Form, Input, Button, Checkbox } from "antd";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { useSelector } from "../../redux/hooks";
+import { signIn } from '../../redux/user/slice';
+
+import styles from "./SignInForm.module.css";
 
 const layout = {
   labelCol: { span: 8 },
@@ -10,8 +16,26 @@ const tailLayout = {
 };
 
 export const SignInForm = () => {
+
+  const loading = useSelector(state => state.user.loading);
+  const error = useSelector(state => state.user.error);
+  const jwt = useSelector(state => state.user.token);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    if(jwt !== null) {
+      history.push("./");
+    }
+  }, [jwt])
+
+
   const onFinish = (values: any) => {
     console.log("Success:", values);
+    dispatch(signIn({
+      email:values.username,
+      password:values.password,
+    }))
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -48,7 +72,7 @@ export const SignInForm = () => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>
       </Form.Item>
