@@ -3,7 +3,7 @@ import { BrowserRouter,Route ,Switch, Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useSelector } from './redux/hooks';
 import styles from "./App.module.css";
-import { DetailPage, HomePage, RegisterPage, SignInPage, SearchPage, ShoppingCart } from './pages';
+import { DetailPage, HomePage, RegisterPage, SignInPage, SearchPage, ShoppingCart,PlaceOrderPage } from './pages';
 import { getShoppingCart } from './redux/shoppingCart/slice';
 
 const PrivateRoute = ({ component, isAuthenticated, ...rest }) => {
@@ -42,6 +42,11 @@ function App() {
               path="/shoppingCart" 
               component={ShoppingCart}>
               </PrivateRoute>
+              <PrivateRoute
+              isAuthenticated={jwt !== null}
+              path="/placeOrder"
+              component={PlaceOrderPage}
+              />
               <Route render={() => <h1>404 页面不存在</h1>}></Route>
              </Switch>
            </BrowserRouter>
