@@ -65,7 +65,7 @@ export class HeaderComponent extends React.Component<Props, State> {
 
   render() {
     const { username } = this.state;
-    const { history, t, jwt } = this.props;
+    const { history, t, jwt, shoppingCart } = this.props;
     return (
       <div className={styles["app-header"]}>
         {/* top-header */}
@@ -92,7 +92,11 @@ export class HeaderComponent extends React.Component<Props, State> {
                   {t("header.welcome")}
                   <Typography.Text strong>{username}</Typography.Text>
                 </span>
-                <Button onClick={() => history.push("/shoppingCart")}>{t("header.shoppingCart")}</Button>
+                <Button 
+                  loading={shoppingCart.loading}
+                  onClick={() => history.push("/shoppingCart")}>
+                  {t("header.shoppingCart")}({shoppingCart.items.length})
+                </Button>
                 <Button onClick={this.handleLogOut}>{t("header.signOut")}</Button>
               </Button.Group>
             ) : (
@@ -150,6 +154,7 @@ function mapStateToProps(state: RootState) {
     language: state.language.language,
     languageList: state.language.languageList,
     jwt: state.user.token,
+    shoppingCart:state.shoppingCart
   };
 }
 function mapDispatchToProps(dispatch: Dispatch) {

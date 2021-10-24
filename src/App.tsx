@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter,Route ,Switch, Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useSelector } from './redux/hooks';
 import styles from "./App.module.css";
 import { DetailPage, HomePage, RegisterPage, SignInPage, SearchPage, ShoppingCart } from './pages';
+import { getShoppingCart } from './redux/shoppingCart/slice';
 
 const PrivateRoute = ({ component, isAuthenticated, ...rest }) => {
   const routeComponent  = (props) => {
@@ -17,8 +19,15 @@ const PrivateRoute = ({ component, isAuthenticated, ...rest }) => {
 }
 
 function App() {
-
     const jwt = useSelector(state => state.user.token);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      if(jwt) {
+        dispatch(getShoppingCart(jwt));
+      }
+    },[jwt]);
+
     return (
         <div className={styles.App}>
            <BrowserRouter>
